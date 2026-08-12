@@ -45,6 +45,18 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
+        // Allow overwriting unverified registration attempts so user can try again
+        userRepository.findByEmail(registerRequest.getEmail()).ifPresent(user -> {
+            if (!user.getIsVerified()) {
+                userRepository.delete(user);
+            }
+        });
+        userRepository.findByUsername(registerRequest.getUsername()).ifPresent(user -> {
+            if (!user.getIsVerified()) {
+                userRepository.delete(user);
+            }
+        });
+
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
