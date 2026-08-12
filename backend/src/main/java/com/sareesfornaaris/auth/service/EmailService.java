@@ -139,9 +139,21 @@ public class EmailService {
             }
 
             int responseCode = conn.getResponseCode();
-            return responseCode == 200 || responseCode == 201;
+            if (responseCode == 200 || responseCode == 201) {
+                return true;
+            }
+
+            java.io.InputStream errStream = conn.getErrorStream();
+            String errResponse = "";
+            if (errStream != null) {
+                try (java.util.Scanner s = new java.util.Scanner(errStream, java.nio.charset.StandardCharsets.UTF_8).useDelimiter("\\A")) {
+                    errResponse = s.hasNext() ? s.next() : "";
+                }
+            }
+            logger.error("[BREVO API ERROR] HTTP Status: {}, Response: {}", responseCode, errResponse);
+            return false;
         } catch (Exception e) {
-            logger.error("Brevo API HTTP error: {}", e.getMessage());
+            logger.error("[BREVO API EXCEPTION] {}", e.getMessage(), e);
             return false;
         }
     }
