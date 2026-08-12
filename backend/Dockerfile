@@ -1,9 +1,12 @@
 # Build stage
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
+
+# Copy pom.xml and source directory
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
 COPY src ./src
+
+# Build production jar
 RUN mvn clean package -DskipTests
 
 # Run stage
