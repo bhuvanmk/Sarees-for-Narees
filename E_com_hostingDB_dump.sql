@@ -390,4 +390,93 @@ INSERT INTO product_images (product_id, image_url) VALUES
 (71, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_4.jpg?updatedAt=1785168353110'),
 (72, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_1.jpg?updatedAt=1785168353875');
 
+INSERT INTO productimages (product_id, image_url) VALUES
+(1, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Ruffle/Ruffle4.jpeg?updatedAt=1785161024860'),
+(2, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Ruffle/Ruffle1.jpeg?updatedAt=1785161024783'),
+(3, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Ruffle/Ruffle3.avif?updatedAt=1785161024402'),
+(4, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Ruffle/Ruffle2.jpeg?updatedAt=1785161024197'),
+
+(5, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/Satin/_Satin2.webp?updatedAt=1785161053940'),
+(6, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/Satin/_Satin1.jpg?updatedAt=1785161053585'),
+(7, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/Satin/_Satin3.avif?updatedAt=1785161053131'),
+(8, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/Satin/_Satin4.jpeg?updatedAt=1785161052740'),
+
+(9, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/Net/%20_Net4.jpeg?updatedAt=1785161118413'),
+(10, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/Net/%20_Net3.jpg?updatedAt=1785161118296'),
+(11, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/Net/%20_Net2.avif?updatedAt=1785161118255'),
+(12, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/Net/%20_Net1.jpeg?updatedAt=1785161118033'),
+
+(13, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Sequin/Sequin3.webp?updatedAt=1785161185269'),
+(14, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Sequin/Sequin4.jpeg?updatedAt=1785161185223'),
+(15, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Sequin/Sequin2.jpeg?updatedAt=1785161185180'),
+(16, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Sequin/Sequin1.jpeg?updatedAt=1785161184855'),
+
+(17, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Georgette/Georgette1.jpg?updatedAt=1785161223667'),
+(18, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Georgette/Georgette2.jpeg?updatedAt=1785161223274'),
+(19, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Georgette/Georgette3.jpeg?updatedAt=1785161223173'),
+(20, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Georgette/Georgette4.jpeg?updatedAt=1785161223010'),
+
+(21, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Linen/%20_Linen1.jpeg?updatedAt=1785161252627'),
+(22, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Linen/%20_Linen2.jpeg?updatedAt=1785161252622'),
+(23, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Linen/%20_Linen3.webp?updatedAt=1785161252399'),
+(24, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Linen/%20_Linen4.jpeg?updatedAt=1785161251950'),
+
+(25, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Printed/_%20%20_Printed3.jpg?updatedAt=1785161278360'),
+(26, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Printed/_%20%20_Printed1.jpeg?updatedAt=1785161277532'),
+(27, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Printed/_%20%20_Printed4.jpeg?updatedAt=1785161277539'),
+(28, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Printed/_%20%20_Printed2.jpeg?updatedAt=1785161277519'),
+
+(29, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Cotton/_Cotton3.jpeg?updatedAt=1785161301936'),
+(30, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Cotton/_Cotton4.jpeg?updatedAt=1785161301844'),
+(31, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Cotton/_Cotton2.webp?updatedAt=1785161301950'),
+(32, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Casual%20Sarees/Cotton/Cotton1%20.jpg?updatedAt=1785161301813'),
+
+(33, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Chanderi/c1.avif?updatedAt=1785214661226'),
+(34, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Chanderi/c3.jpg?updatedAt=1785214660756'),
+(35, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Chanderi/c2.webp?updatedAt=1785214660838'),
+(36, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Chanderi/c4.webp?updatedAt=1785214660851'),
+(37, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Chanderi/c5.webp?updatedAt=1785214660798'),
+
+(38, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Paithani/p1.webp?updatedAt=1785214696341'),
+(39, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Paithani/p2.avif?updatedAt=1785214695924'),
+(40, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Paithani/p5.webp?updatedAt=1785214695213'),
+(41, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Paithani/p3.avif?updatedAt=1785214695059'),
+(42, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Paithani/p4.jpeg?updatedAt=1785214694728'),
+
+(43, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Banarasi/b3.webp?updatedAt=1785214721013'),
+(44, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Banarasi/b5.avif?updatedAt=1785214720129'),
+(45, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Banarasi/b4.webp?updatedAt=1785214720089'),
+(46, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Banarasi/b1.webp?updatedAt=1785214719926'),
+(47, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Banarasi/b2.webp?updatedAt=1785214719886'),
+
+(48, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Kanjivaram/k3.jpg?updatedAt=1785214746050'),
+(49, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Kanjivaram/k1.webp?updatedAt=1785214745823'),
+(50, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Kanjivaram/k2.jpg?updatedAt=1785214745416'),
+(51, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Kanjivaram/k4.webp?updatedAt=1785214745086'),
+(52, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Traditional%20sarees/Kanjivaram/k5.webp?updatedAt=1785214744446'),
+
+(53, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Designer%20Bridal/Designer%20Bridal_5.jpg?updatedAt=1785215669360'),
+(54, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Designer%20Bridal/Designer%20Bridal_4.webp?updatedAt=1785168206270'),
+(55, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Designer%20Bridal/Designer%20Bridal_1.webp?updatedAt=1785168201696'),
+(56, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Designer%20Bridal/Designer%20Bridal_3.webp?updatedAt=1785168203059'),
+(57, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Designer%20Bridal/Designer%20Bridal_2.webp?updatedAt=1785168202558'),
+
+(58, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Embroidered/Embroidered_5.jpeg?updatedAt=1785215700076'),
+(59, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Embroidered/Embroidered_1.jpg?updatedAt=1785168916015'),
+(60, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Embroidered/Embroidered_3.jpeg?updatedAt=1785168251220'),
+(61, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Embroidered/Embroidered_4.webp?updatedAt=1785168255316'),
+(62, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Embroidered/Embroidered_2.jpeg?updatedAt=1785168251329'),
+
+(63, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Zari%20Work/Zari%20work_5.webp'),
+(64, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Zari%20Work/Zari%20work_3.jpg?updatedAt=1785168310198'),
+(65, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Zari%20Work/Zari%20work_4.webp?updatedAt=1785168310150'),
+(66, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Zari%20Work/Zari%20work_1.jpg?updatedAt=1785168309552'),
+(67, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Zari%20Work/Zari%20work_2.webp?updatedAt=1785168309711'),
+
+(68, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bridal%20silk_5.webp?updatedAt=1785215761786'),
+(69, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_3.jpg?updatedAt=1785168354745'),
+(70, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_2.jpg?updatedAt=1785168355144'),
+(71, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_4.jpg?updatedAt=1785168353110'),
+(72, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_1.jpg?updatedAt=1785168353875');
+
 SET FOREIGN_KEY_CHECKS = 1;
