@@ -72,6 +72,7 @@ public class WebSecurityConfig {
                         auth
                                 // Health checks
                                 .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/health")).permitAll()
                                 // Public auth & Aura AI assistant endpoints
                                 .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()

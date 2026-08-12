@@ -14,8 +14,14 @@ public class HealthController {
         return ResponseEntity.ok("OK");
     }
 
+    @GetMapping("/api")
+    public ResponseEntity<String> apiRoot() {
+        return ResponseEntity.ok("Sarees For Naaris API Service is UP");
+    }
+
     @GetMapping("/api/health")
     public ResponseEntity<Map<String, String>> health() {
         return ResponseEntity.ok(Map.of("status", "UP"));
     }
 }
+
