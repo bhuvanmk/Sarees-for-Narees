@@ -23,21 +23,21 @@ spring:
 
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:465}
+    port: ${MAIL_PORT:587}
     username: ${MAIL_USERNAME:teamvelocity4you@gmail.com}
     password: ${MAIL_PASSWORD:siykurjgrcjydedy}
     properties:
       mail:
         smtp:
           auth: true
-          ssl:
+          starttls:
             enable: true
-          socketFactory:
-            port: 465
-            class: javax.net.ssl.SSLSocketFactory
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
+            required: false
+          ssl:
+            trust: "*"
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
 
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:https://sarees-for-naaris.vercel.app,http://localhost:5173}
