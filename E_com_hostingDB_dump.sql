@@ -1,19 +1,25 @@
--- Complete Standalone Schema Creator for E_com_hostingDB
+-- =========================================================
+-- Sarees For Naaris Master Database DDL & Seed Script
+-- Schema Name: E_com_hostingDB
+-- JPA Entities Aligned Execution Script
+-- =========================================================
+
 CREATE DATABASE IF NOT EXISTS E_com_hostingDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE E_com_hostingDB;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- 1. Create Core Master Tables matching Spring Boot Entities
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
+    username VARCHAR(45) NOT NULL,
+    email VARCHAR(45) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     
-ole ENUM('ADMIN', 'SELLER', 'CUSTOMER') NOT NULL DEFAULT 'CUSTOMER',
-    is_verified BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+ole VARCHAR(20) NOT NULL DEFAULT 'CUSTOMER',
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS otp_verification (
@@ -22,7 +28,7 @@ CREATE TABLE IF NOT EXISTS otp_verification (
     otp_code VARCHAR(10) NOT NULL,
     purpose VARCHAR(50) NOT NULL,
     expiry_time DATETIME NOT NULL,
-    is_used BOOLEAN DEFAULT FALSE,
+    is_used BOOLEAN NOT NULL DEFAULT FALSE,
     INDEX idx_email_purpose (email, purpose)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -32,7 +38,7 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens (
     
 eset_token VARCHAR(255) NOT NULL UNIQUE,
     expiry_time DATETIME NOT NULL,
-    is_used BOOLEAN DEFAULT FALSE,
+    is_used BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -43,25 +49,20 @@ efresh_tokens (
     
 efresh_token VARCHAR(255) NOT NULL UNIQUE,
     expiry_time DATETIME NOT NULL,
-    is_revoked BOOLEAN DEFAULT FALSE,
+    is_revoked BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
-    
-ame VARCHAR(100) NOT NULL UNIQUE,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    category_name VARCHAR(45) NOT NULL UNIQUE,
+    categoryimage VARCHAR(500)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS sub_categories (
+CREATE TABLE IF NOT EXISTS sub_category (
     subcategory_id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
-    
-ame VARCHAR(100) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    subcategory_name VARCHAR(255) NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -70,78 +71,90 @@ CREATE TABLE IF NOT EXISTS products (
     seller_id INT NOT NULL,
     category_id INT NOT NULL,
     subcategory_id INT,
-    	itle VARCHAR(255) NOT NULL,
+    	itle VARCHAR(45) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
     stock_quantity INT NOT NULL DEFAULT 0,
-    is_active BOOLEAN DEFAULT TRUE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (seller_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE,
-    FOREIGN KEY (subcategory_id) REFERENCES sub_categories(subcategory_id) ON DELETE SET NULL
+    FOREIGN KEY (subcategory_id) REFERENCES sub_category(subcategory_id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS product_images (
+CREATE TABLE IF NOT EXISTS productimages (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     image_url VARCHAR(500) NOT NULL,
-    is_primary BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS cart_items (
-    cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS wishlist (
-    wishlist_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS wishlist_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_user_product (user_id, product_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS addresses (
-    address_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS ddresses (
+    ddress_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    full_name VARCHAR(100) NOT NULL,
+    ull_name VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL,
-    address_line1 VARCHAR(255) NOT NULL,
-    address_line2 VARCHAR(255),
+    ddress_line1 VARCHAR(255) NOT NULL,
+    ddress_line2 VARCHAR(255),
     city VARCHAR(100) NOT NULL,
     state VARCHAR(100) NOT NULL,
     pincode VARCHAR(20) NOT NULL,
-    address_type VARCHAR(20) DEFAULT 'Home',
+    ddress_type VARCHAR(20) DEFAULT 'Home',
     is_default BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS orders (
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id VARCHAR(255) PRIMARY KEY,
     user_id INT NOT NULL,
-    total_amount DECIMAL(10,2) NOT NULL,
-    status VARCHAR(50) DEFAULT 'PENDING',
-    address_snapshot TEXT,
+    	otal_amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    ddress_snapshot TEXT,
+    payment_method VARCHAR(50),
+    payment_status VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS order_items (
-    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id VARCHAR(255) NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    price_per_unit DECIMAL(10,2) NOT NULL,
+    	otal_price DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS order_status_history (
+    history_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id VARCHAR(255) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    changed_at DATETIME NOT NULL,
+    changed_by_user_id INT,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS 
@@ -150,19 +163,25 @@ eviews (
 eview_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     user_id INT NOT NULL,
+    order_id VARCHAR(255),
     
 ating INT NOT NULL,
     comment TEXT,
-    is_approved BOOLEAN DEFAULT TRUE,
-    helpful_count INT DEFAULT 0,
+    photo_urls TEXT,
+    is_approved BOOLEAN NOT NULL DEFAULT TRUE,
+    helpful_count INT NOT NULL DEFAULT 0,
+    
+eported_count INT NOT NULL DEFAULT 0,
     seller_reply TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    seller_replied_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-INSERT INTO categories (category_id, name) VALUES
+-- Seed Base Categories
+INSERT INTO categories (category_id, category_name) VALUES
 (1, 'Banarasi'),
 (2, 'Kanjivaram'),
 (3, 'Chanderi'),
@@ -170,76 +189,20 @@ INSERT INTO categories (category_id, name) VALUES
 (5, 'Cotton'),
 (6, 'Silk'),
 (7, 'Party Wear'),
-(8, 'Wedding');
+(8, 'Wedding')
+ON DUPLICATE KEY UPDATE category_name = VALUES(category_name);
 
--- 2. Insert Subcategories
+-- Seed Base Sub-categories
 INSERT INTO sub_category (subcategory_id, category_id, subcategory_name) VALUES
-(1, 1, 'Zari Woven Banarasi Silk'),
-(2, 1, 'Katan Silk Banarasi'),
-(3, 2, 'Traditional Temple Kanjivaram'),
-(4, 2, 'Bridal Pure Gold Zari Kanjivaram'),
-(5, 3, 'Handloom Tissue Chanderi'),
-(6, 3, 'Silk Cotton Chanderi'),
-(7, 4, 'Royal Peacock Border Paithani'),
-(8, 4, 'Traditional Maharani Paithani'),
-(9, 5, 'Mulmul Printed Cotton'),
-(10, 6, 'Tussar Pure Silk'),
-(11, 7, 'Designer Sequined Party Saree'),
-(12, 8, 'Heavy Brocade Wedding Collection');
+(1, 1, 'Pure Silk Banarasi'),
+(2, 1, 'Katan Banarasi'),
+(3, 2, 'Traditional Kanjivaram'),
+(4, 2, 'Bridal Kanjivaram'),
+(5, 3, 'Chanderi Cotton Silk'),
+(6, 4, 'Yeola Paithani')
+ON DUPLICATE KEY UPDATE subcategory_name = VALUES(subcategory_name);
 
--- 3. Insert Products
-INSERT INTO products (product_id, name, description, price, stock, category_id, subcategory_id, created_at) VALUES
-(1, 'Royal Red Banarasi Zari Silk Saree', 'Exquisite handwoven crimson Banarasi silk saree featuring heavy golden floral jaal and rich pallu.', 12999.00, 15, 1, 1, NOW() - INTERVAL 1 DAY),
-(2, 'Gold Tissue Banarasi Brocade Saree', 'Stunning golden tissue Banarasi saree with intricated silver-gold zari weave for festive luxury.', 14499.00, 10, 1, 2, NOW() - INTERVAL 2 DAY),
-(3, 'Emerald Green Banarasi Silk Saree', 'Deep emerald green Katan silk saree with timeless kadwa weave motifs.', 11800.00, 20, 1, 2, NOW() - INTERVAL 3 DAY),
-(4, 'Pink Floral Jamdani Banarasi Saree', 'Delicate pastel pink Banarasi saree crafted with intricate floral jamdani weave.', 9899.00, 12, 1, 1, NOW() - INTERVAL 4 DAY),
-(5, 'Maroon Royal Brocade Banarasi Saree', 'Traditional bridal maroon saree embellished with dense gold zari weave.', 15999.00, 8, 1, 1, NOW() - INTERVAL 5 DAY),
-
-(6, 'Classic Mustard Gold Kanjivaram', 'Authentic Kanjivaram silk saree in vibrant mustard gold with rich contrasting border.', 18999.00, 14, 2, 3, NOW() - INTERVAL 1 DAY),
-(7, 'Magenta Bridal Silk Kanjivaram', 'Pure zari woven magenta bridal saree featuring temple motifs and pure silk lustre.', 22500.00, 6, 2, 4, NOW() - INTERVAL 2 DAY),
-(8, 'Royal Blue Korvai Kanjivaram', 'Classic royal blue Kanjivaram silk saree with traditional contrast korvai border.', 16499.00, 18, 2, 3, NOW() - INTERVAL 3 DAY),
-(9, 'Deep Crimson Temple Border Silk', 'Rich crimson red Kanjivaram saree with elegant zari temple design on pallu.', 19800.00, 9, 2, 4, NOW() - INTERVAL 4 DAY),
-(10, 'Pastel Peach Zari Kanjivaram', 'Modern pastel peach silk Kanjivaram with subtle silver zari weaves.', 14999.00, 11, 2, 3, NOW() - INTERVAL 5 DAY),
-
-(11, 'Pastel Pink Handloom Chanderi Saree', 'Lightweight pastel pink Chanderi saree with sheer texture and gold zari bootis.', 4999.00, 25, 3, 5, NOW() - INTERVAL 1 DAY),
-(12, 'Mint Green Chanderi Silk Saree', 'Refreshing mint green Chanderi silk saree with hand-printed floral motifs.', 5499.00, 22, 3, 6, NOW() - INTERVAL 2 DAY),
-(13, 'Golden Yellow Tissue Chanderi Saree', 'Graceful golden Chanderi tissue saree perfect for daytime rituals andhaldi ceremonies.', 6299.00, 15, 3, 5, NOW() - INTERVAL 3 DAY),
-(14, 'Off-White Chanderi Cotton Saree', 'Elegant ivory off-white Chanderi saree with red contrast border.', 4299.00, 30, 3, 6, NOW() - INTERVAL 4 DAY),
-(15, 'Lavender Silver Zari Chanderi Saree', 'Contemporary lavender shade Chanderi saree woven with delicate silver threads.', 5899.00, 17, 3, 5, NOW() - INTERVAL 5 DAY),
-
-(16, 'Peacock Blue Royal Paithani Saree', 'Traditional hand-loomed peacock blue Paithani saree with pure zari peacock motif border.', 24999.00, 5, 4, 7, NOW() - INTERVAL 1 DAY),
-(17, 'Bright Yellow Maharani Paithani', 'Iconic yellow Paithani saree featuring rich multicolored pallu with lotus motifs.', 21999.00, 7, 4, 8, NOW() - INTERVAL 2 DAY),
-(18, 'Magenta Silk Paithani Saree', 'Royal magenta Paithani saree with traditional gold zari border.', 19999.00, 10, 4, 7, NOW() - INTERVAL 3 DAY),
-(19, 'Dark Green Floral Border Paithani', 'Rich forest green silk Paithani adorned with peacock pallu art.', 23500.00, 6, 4, 8, NOW() - INTERVAL 4 DAY),
-(20, 'Crimson Red Festive Paithani', 'Vibrant red Paithani saree for weddings and grand festive celebrations.', 25999.00, 4, 4, 7, NOW() - INTERVAL 5 DAY);
-
--- 4. Insert Product Images
-INSERT INTO productimages (product_id, image_url) VALUES
-(1, '/categories/banarasi/b1.webp'),
-(2, '/categories/banarasi/b2.webp'),
-(3, '/categories/banarasi/b3.webp'),
-(4, '/categories/banarasi/b4.webp'),
-(5, '/categories/banarasi/b5.avif'),
-
-(6, '/categories/kanjivaram/k1.webp'),
-(7, '/categories/kanjivaram/k2.jpg'),
-(8, '/categories/kanjivaram/k3.jpg'),
-(9, '/categories/kanjivaram/k4.webp'),
-(10, '/categories/kanjivaram/k5.webp'),
-
-(11, '/categories/chendari/c1.avif'),
-(12, '/categories/chendari/c2.webp'),
-(13, '/categories/chendari/c3.jpg'),
-(14, '/categories/chendari/c4.webp'),
-(15, '/categories/chendari/c5.webp'),
-
-(16, '/categories/paithani/p1.webp'),
-(17, '/categories/paithani/p2.avif'),
-(18, '/categories/paithani/p3.avif'),
-(19, '/categories/paithani/p4.jpeg'),
-(20, '/categories/paithani/p5.webp');
-
-
+-- Apply Full Catalog and Seed Data
 -- Data Migration & Catalog Seeding Script for Sarees For Naaris
 -- Replaces local file paths with hosted ImageKit URLs and seeds Categories/Subcategories
 
@@ -483,7 +446,5 @@ INSERT INTO productimages (product_id, image_url) VALUES
 (71, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_4.jpg?updatedAt=1785168353110'),
 (72, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_1.jpg?updatedAt=1785168353875');
 
-
-SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 1;
