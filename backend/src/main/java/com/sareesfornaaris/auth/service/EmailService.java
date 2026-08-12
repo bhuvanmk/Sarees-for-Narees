@@ -57,8 +57,28 @@ public class EmailService {
     }
 
     private void sendHtmlEmail(String toEmail, String subject, String htmlContent) {
+        if (toEmail == null || toEmail.trim().isEmpty()) {
+            return;
+        }
+
+        // 1. Try Resend HTTP API if RESEND_API_KEY environment variable is present (Bypasses all cloud SMTP port blocks)
+        String resendApiKey = System.getenv("RESEND_API_KEY");
+        if (resendApiKey != null && !resendApiKey.trim().isEmpty()) {
+            try {
+                logger.info("[EMAIL SERVICE] Dispatching email via Resend HTTP REST API to: {}", toEmail);
+                boolean success = sendViaResendApi(resendApiKey.trim(), toEmail, subject, htmlContent);
+                if (success) {
+                    logger.info("[EMAIL SERVICE] Email successfully delivered via Resend HTTP API to: {}", toEmail);
+                    return;
+                }
+            } catch (Exception e) {
+                logger.error("[EMAIL ERROR] Resend HTTP API dispatch failed: {}. Falling back to JavaMailSender...", e.getMessage());
+            }
+        }
+
+        // 2. Fallback to JavaMailSender SMTP
         if (mailSender == null || fromEmail == null || fromEmail.trim().isEmpty()) {
-            logger.warn("[EMAIL SERVICE] Mail sender not configured (MAIL_USERNAME/MAIL_PASSWORD env vars missing). Skipping email to: {}, Subject: {}", toEmail, subject);
+            logger.warn("[EMAIL SERVICE] Mail sender not configured. Skipping SMTP email to: {}", toEmail);
             return;
         }
 
@@ -70,12 +90,53 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
             mailSender.send(message);
+            logger.info("[EMAIL SERVICE] Email successfully sent via SMTP to: {}", toEmail);
         } catch (Exception e) {
-            // Email dispatch is best-effort: SMTP may be unavailable (e.g. no network access).
-            // Never fail the underlying business operation (registration/OTP/reset/payment)
-            // because of a mail outage. The OTP is always available in the console logs.
             logger.error("[EMAIL ERROR] Failed to send email to {}: {}", toEmail, e.getMessage());
         }
+    }
+
+    private boolean sendViaResendApi(String apiKey, String toEmail, String subject, String htmlContent) {
+        try {
+            java.net.URL url = new java.net.URL("https://api.resend.com/emails");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            String sender = fromEmail != null && !fromEmail.trim().isEmpty() ? fromEmail : "onboarding@resend.dev";
+            
+            // Build JSON payload safely
+            String jsonPayload = String.format(
+                    "{\"from\":\"Sarees For Naaris <%s>\",\"to\":[\"%s\"],\"subject\":\"%s\",\"html\":%s}",
+                    sender,
+                    toEmail,
+                    escapeJson(subject),
+                    escapeJsonValue(htmlContent)
+            );
+
+            try (java.io.OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonPayload.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            return responseCode == 200 || responseCode == 201;
+        } catch (Exception e) {
+            logger.error("Resend API HTTP error: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    private String escapeJson(String text) {
+        if (text == null) return "\"\"";
+        return "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + "\"";
+    }
+
+    private String escapeJsonValue(String text) {
+        if (text == null) return "\"\"";
+        return "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t") + "\"";
     }
 
     private String buildEmailTemplate(String headerTitle, String greeting, String bodyText, String codeBox, String footerNote) {
