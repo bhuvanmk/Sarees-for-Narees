@@ -1,81 +1,167 @@
--- =========================================================
--- Sarees For Naaris Complete Single-File Hosting Script
--- Target Database Schema: E_com_hostingDB
--- Generated: 2026-08-12
--- =========================================================
-
+-- Complete Standalone Schema Creator for E_com_hostingDB
 CREATE DATABASE IF NOT EXISTS E_com_hostingDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE E_com_hostingDB;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Database schema migration for Sarees For Naaris
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    
+ole ENUM('ADMIN', 'SELLER', 'CUSTOMER') NOT NULL DEFAULT 'CUSTOMER',
+    is_verified BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- USE E_com_hostingDB;
-
--- 1. Alter users table
--- We modify password length to 255 for BCrypt hashes and add is_verified flag
-ALTER TABLE users MODIFY COLUMN password VARCHAR(255) NOT NULL;
-ALTER TABLE users ADD COLUMN is_verified BOOLEAN DEFAULT FALSE;
-
--- 2. Create otp_verification table
 CREATE TABLE IF NOT EXISTS otp_verification (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL,
     otp_code VARCHAR(10) NOT NULL,
-    purpose VARCHAR(50) NOT NULL, -- 'REGISTRATION' or 'RESET'
+    purpose VARCHAR(50) NOT NULL,
     expiry_time DATETIME NOT NULL,
     is_used BOOLEAN DEFAULT FALSE,
     INDEX idx_email_purpose (email, purpose)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 3. Create password_reset_tokens table
 CREATE TABLE IF NOT EXISTS password_reset_tokens (
-    token_id INT AUTO_INCREMENT PRIMARY KEY,
+    	oken_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    reset_token VARCHAR(255) NOT NULL UNIQUE,
+    
+eset_token VARCHAR(255) NOT NULL UNIQUE,
     expiry_time DATETIME NOT NULL,
     is_used BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 4. Create refresh_tokens table
-CREATE TABLE IF NOT EXISTS refresh_tokens (
-    token_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS 
+efresh_tokens (
+    	oken_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    refresh_token VARCHAR(255) NOT NULL UNIQUE,
+    
+efresh_token VARCHAR(255) NOT NULL UNIQUE,
     expiry_time DATETIME NOT NULL,
-    revoked BOOLEAN DEFAULT FALSE,
+    is_revoked BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 5. Create order_status_history table
-CREATE TABLE IF NOT EXISTS order_status_history (
-    history_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    changed_at DATETIME NOT NULL,
-    changed_by_user_id INT,
+CREATE TABLE IF NOT EXISTS categories (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    
+ame VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS sub_categories (
+    subcategory_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    
+ame VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    seller_id INT NOT NULL,
+    category_id INT NOT NULL,
+    subcategory_id INT,
+    	itle VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    stock_quantity INT NOT NULL DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (seller_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE,
+    FOREIGN KEY (subcategory_id) REFERENCES sub_categories(subcategory_id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS product_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    image_url VARCHAR(500) NOT NULL,
+    is_primary BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS cart_items (
+    cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS wishlist (
+    wishlist_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS ddresses (
+    ddress_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    ull_name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    ddress_line1 VARCHAR(255) NOT NULL,
+    ddress_line2 VARCHAR(255),
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(100) NOT NULL,
+    pincode VARCHAR(20) NOT NULL,
+    ddress_type VARCHAR(20) DEFAULT 'Home',
+    is_default BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    	otal_amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'PENDING',
+    ddress_snapshot TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS order_items (
+    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
-    FOREIGN KEY (changed_by_user_id) REFERENCES users(user_id) ON DELETE SET NULL,
-    INDEX idx_order_history (order_id)
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS 
+eviews (
+    
+eview_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    user_id INT NOT NULL,
+    
+ating INT NOT NULL,
+    comment TEXT,
+    is_approved BOOLEAN DEFAULT TRUE,
+    helpful_count INT DEFAULT 0,
+    seller_reply TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
--- Data Seed Script for Sarees For Naaris Catalog
-
--- USE E_com_hostingDB;
-
--- Clean existing catalog data
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE productimages;
-TRUNCATE TABLE cart_items;
-TRUNCATE TABLE products;
-TRUNCATE TABLE sub_category;
-TRUNCATE TABLE categories;
-SET FOREIGN_KEY_CHECKS = 1;
-
--- 1. Insert Categories
 INSERT INTO categories (category_id, category_name) VALUES
 (1, 'Banarasi'),
 (2, 'Kanjivaram'),
@@ -397,5 +483,7 @@ INSERT INTO productimages (product_id, image_url) VALUES
 (71, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_4.jpg?updatedAt=1785168353110'),
 (72, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Wedding%20sarees/Bridal%20Silk/Bride%20Silk_1.jpg?updatedAt=1785168353875');
 
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 1;
