@@ -162,7 +162,7 @@ ating INT NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-INSERT INTO categories (category_id, category_name) VALUES
+INSERT INTO categories (category_id, name) VALUES
 (1, 'Banarasi'),
 (2, 'Kanjivaram'),
 (3, 'Chanderi'),
