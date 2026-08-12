@@ -28,7 +28,7 @@ spring:
             enable: true
 
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://sarees-for-naaris.vercel.app,http://localhost:5173}
 
 app:
   jwt:
