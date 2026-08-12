@@ -61,7 +61,22 @@ public class EmailService {
             return;
         }
 
-        // 1. Try Resend HTTP API if RESEND_API_KEY environment variable is present (Bypasses all cloud SMTP port blocks)
+        // 1. Try Brevo HTTP API if BREVO_API_KEY is present (Bypasses all SMTP port blocks & sends to ANY recipient)
+        String brevoApiKey = System.getenv("BREVO_API_KEY");
+        if (brevoApiKey != null && !brevoApiKey.trim().isEmpty()) {
+            try {
+                logger.info("[EMAIL SERVICE] Dispatching email via Brevo HTTP REST API to: {}", toEmail);
+                boolean success = sendViaBrevoApi(brevoApiKey.trim(), toEmail, subject, htmlContent);
+                if (success) {
+                    logger.info("[EMAIL SERVICE] Email successfully delivered via Brevo HTTP API to: {}", toEmail);
+                    return;
+                }
+            } catch (Exception e) {
+                logger.error("[EMAIL ERROR] Brevo HTTP API dispatch failed: {}. Trying next fallback...", e.getMessage());
+            }
+        }
+
+        // 2. Try Resend HTTP API if RESEND_API_KEY environment variable is present
         String resendApiKey = System.getenv("RESEND_API_KEY");
         if (resendApiKey != null && !resendApiKey.trim().isEmpty()) {
             try {
@@ -93,6 +108,41 @@ public class EmailService {
             logger.info("[EMAIL SERVICE] Email successfully sent via SMTP to: {}", toEmail);
         } catch (Exception e) {
             logger.error("[EMAIL ERROR] Failed to send email to {}: {}", toEmail, e.getMessage());
+        }
+    }
+
+    private boolean sendViaBrevoApi(String apiKey, String toEmail, String subject, String htmlContent) {
+        try {
+            java.net.URL url = new java.net.URL("https://api.brevo.com/v3/smtp/email");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("api-key", apiKey);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+
+            String senderName = "Sarees For Naaris";
+            String senderEmail = fromEmail != null && !fromEmail.trim().isEmpty() ? fromEmail : "teamvelocity4you@gmail.com";
+
+            String jsonPayload = String.format(
+                    "{\"sender\":{\"name\":\"%s\",\"email\":\"%s\"},\"to\":[{\"email\":\"%s\"}],\"subject\":\"%s\",\"htmlContent\":%s}",
+                    senderName,
+                    senderEmail,
+                    toEmail,
+                    escapeJson(subject),
+                    escapeJsonValue(htmlContent)
+            );
+
+            try (java.io.OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonPayload.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            return responseCode == 200 || responseCode == 201;
+        } catch (Exception e) {
+            logger.error("Brevo API HTTP error: {}", e.getMessage());
+            return false;
         }
     }
 
