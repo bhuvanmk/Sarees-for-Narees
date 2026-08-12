@@ -11,7 +11,7 @@ eviews;
 DROP TABLE IF EXISTS order_status_history;
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS ddresses;
+DROP TABLE IF EXISTS ddresses;
 DROP TABLE IF EXISTS wishlist_items;
 DROP TABLE IF EXISTS cart_items;
 DROP TABLE IF EXISTS productimages;
@@ -134,17 +134,17 @@ CREATE TABLE wishlist_items (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 11. Create Addresses Table
-CREATE TABLE ddresses (
-    ddress_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE ddresses (
+    ddress_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    ull_name VARCHAR(100) NOT NULL,
+    ull_name VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL,
-    ddress_line1 VARCHAR(255) NOT NULL,
-    ddress_line2 VARCHAR(255),
+    ddress_line1 VARCHAR(255) NOT NULL,
+    ddress_line2 VARCHAR(255),
     city VARCHAR(100) NOT NULL,
     state VARCHAR(100) NOT NULL,
     pincode VARCHAR(20) NOT NULL,
-    ddress_type VARCHAR(20) DEFAULT 'Home',
+    ddress_type VARCHAR(20) DEFAULT 'Home',
     is_default BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
@@ -156,7 +156,7 @@ CREATE TABLE orders (
     user_id INT NOT NULL,
     	otal_amount DECIMAL(10,2) NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
-    ddress_snapshot TEXT,
+    ddress_snapshot TEXT,
     payment_method VARCHAR(50),
     payment_status VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
