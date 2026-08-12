@@ -49,11 +49,13 @@ public class AuthController {
         userRepository.findByEmail(registerRequest.getEmail()).ifPresent(user -> {
             if (!user.getIsVerified()) {
                 userRepository.delete(user);
+                userRepository.flush();
             }
         });
         userRepository.findByUsername(registerRequest.getUsername()).ifPresent(user -> {
             if (!user.getIsVerified()) {
                 userRepository.delete(user);
+                userRepository.flush();
             }
         });
 
