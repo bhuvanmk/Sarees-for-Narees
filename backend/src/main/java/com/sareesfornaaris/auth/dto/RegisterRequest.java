@@ -12,7 +12,7 @@ public class RegisterRequest {
     private String username;
 
     @NotBlank
-    @Size(max = 45)
+    @Size(max = 100)
     @Email
     private String email;
 
