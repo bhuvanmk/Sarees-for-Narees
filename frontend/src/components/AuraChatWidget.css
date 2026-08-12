@@ -1,0 +1,593 @@
+/* ==========================================================================
+   Aura AI Shopping Assistant Widget (Luxury Light Cream & Gold Theme)
+   ========================================================================== */
+
+.aura-widget-container {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   Floating Action Button (Luxury Gold & Dark Cream)
+   -------------------------------------------------------------------------- */
+.aura-fab-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #2d251e 0%, #1a140e 100%);
+  color: #fef3c7;
+  border: 1.5px solid rgba(212, 175, 55, 0.7);
+  padding: 12px 22px;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 
+    0 0 18px rgba(212, 175, 55, 0.4),
+    0 10px 25px -5px rgba(0, 0, 0, 0.25),
+    inset 0 0 10px rgba(212, 175, 55, 0.2);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+}
+
+.aura-fab-button:hover {
+  transform: translateY(-3px) scale(1.04);
+  border-color: #d4af37;
+  box-shadow: 
+    0 0 25px rgba(212, 175, 55, 0.7),
+    0 15px 35px -5px rgba(0, 0, 0, 0.35);
+}
+
+.aura-fab-button.active {
+  background: linear-gradient(135deg, #3d3229 0%, #2d251e 100%);
+  border-color: #d4af37;
+}
+
+.aura-fab-glow {
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #d4af37, #f59e0b, #e6ca65);
+  opacity: 0.4;
+  filter: blur(8px);
+  z-index: -1;
+  animation: creamAuraPulse 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes creamAuraPulse {
+  0% { opacity: 0.3; filter: blur(6px); transform: scale(0.98); }
+  100% { opacity: 0.7; filter: blur(10px); transform: scale(1.03); }
+}
+
+.aura-sparkle-symbol {
+  font-size: 1.3rem;
+  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.8));
+}
+
+.aura-fab-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: linear-gradient(135deg, #ffffff 0%, #fef3c7 60%, #e6ca65 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+.aura-unread-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 11px;
+  height: 11px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  border: 2px solid #2d251e;
+  box-shadow: 0 0 8px #ef4444;
+}
+
+/* --------------------------------------------------------------------------
+   Chat Window (Luxury Light Cream & Gold Glassmorphic Container)
+   -------------------------------------------------------------------------- */
+.aura-chat-modal {
+  position: absolute;
+  bottom: 74px;
+  right: 0;
+  width: 390px;
+  height: 560px;
+  max-width: calc(100vw - 36px);
+  max-height: calc(100vh - 110px);
+  background: linear-gradient(160deg, rgba(254, 252, 248, 0.97) 0%, rgba(250, 245, 235, 0.95) 50%, rgba(245, 238, 224, 0.97) 100%);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1.5px solid rgba(212, 175, 55, 0.6);
+  border-radius: 24px;
+  box-shadow: 
+    0 0 35px rgba(212, 175, 55, 0.25),
+    0 20px 50px rgba(0, 0, 0, 0.18),
+    inset 0 0 25px rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: creamModalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes creamModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.aura-chat-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #2d251e 0%, #1a140e 100%);
+  border-bottom: 1.5px solid rgba(212, 175, 55, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.aura-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.aura-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37 0%, #b48811 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  box-shadow: 
+    0 0 12px rgba(212, 175, 55, 0.6),
+    inset 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+.aura-header-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aura-badge {
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 12px;
+  background: rgba(212, 175, 55, 0.25);
+  color: #fef3c7;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.aura-header-subtitle {
+  font-size: 0.76rem;
+  color: #d1c7bd;
+  margin: 2px 0 0 0;
+}
+
+.aura-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2d9cf;
+  font-size: 1.3rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.aura-close-btn:hover {
+  color: #ffffff;
+  background: rgba(212, 175, 55, 0.4);
+  border-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   Messages Body & Light Cream Background
+   -------------------------------------------------------------------------- */
+.aura-messages-body {
+  flex: 1;
+  padding: 18px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(180, 136, 17, 0.06) 0%, transparent 45%),
+    linear-gradient(180deg, #FAF7F2 0%, #F4ECE1 100%);
+}
+
+/* Scrollbars for Body and Prompts */
+.aura-messages-body::-webkit-scrollbar,
+.aura-quick-prompts::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.aura-messages-body::-webkit-scrollbar-track,
+.aura-quick-prompts::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+}
+
+.aura-messages-body::-webkit-scrollbar-thumb,
+.aura-quick-prompts::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4af37, #b48811);
+  border-radius: 10px;
+}
+
+.aura-message-row {
+  display: flex;
+  gap: 10px;
+  max-width: 90%;
+}
+
+.aura-user-row {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.aura-assistant-row {
+  align-self: flex-start;
+}
+
+.aura-msg-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #b48811);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+.aura-msg-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aura-msg-bubble {
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.aura-user-bubble {
+  background: linear-gradient(135deg, #d4af37 0%, #b48811 100%);
+  color: #ffffff;
+  font-weight: 600;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
+}
+
+.aura-assistant-bubble {
+  background: #ffffff;
+  color: #2d251e;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.aura-msg-text {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.aura-login-btn,
+.aura-orders-link-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #2d251e 0%, #1a140e 100%);
+  color: #fef3c7;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border: 1px solid rgba(212, 175, 55, 0.6);
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aura-login-btn:hover,
+.aura-orders-link-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.6);
+  background: linear-gradient(135deg, #3d3229 0%, #2d251e 100%);
+}
+
+/* --------------------------------------------------------------------------
+   Product Cards Carousel (Light Cream Styling)
+   -------------------------------------------------------------------------- */
+.aura-products-carousel {
+  margin-top: 6px;
+}
+
+.aura-suggested-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #8c6d1f;
+  margin: 0 0 8px 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.aura-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aura-product-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 14px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.aura-product-card:hover {
+  background: #fffdf9;
+  border-color: #b48811;
+  transform: translateX(4px);
+  box-shadow: 
+    0 0 15px rgba(212, 175, 55, 0.3),
+    0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.aura-product-img {
+  width: 52px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.aura-product-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.aura-product-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2d251e;
+  margin: 0 0 3px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.aura-product-category {
+  font-size: 0.72rem;
+  color: #786c60;
+  margin: 0 0 6px 0;
+}
+
+.aura-product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.aura-product-price {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #b48811;
+}
+
+.aura-stock-badge {
+  font-size: 0.66rem;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.aura-stock-badge.in-stock {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.aura-stock-badge.out-stock {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   Thinking Dots Indicator
+   -------------------------------------------------------------------------- */
+.aura-thinking {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.aura-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.aura-dots span {
+  width: 7px;
+  height: 7px;
+  background-color: #d4af37;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #d4af37;
+  animation: creamDotPulse 1.4s infinite ease-in-out both;
+}
+
+.aura-dots span:nth-child(1) { animation-delay: -0.32s; }
+.aura-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes creamDotPulse {
+  0%, 80%, 100% { transform: scale(0.3); opacity: 0.3; }
+  40% { transform: scale(1.1); opacity: 1; }
+}
+
+.aura-thinking-text {
+  font-size: 0.8rem;
+  color: #786c60;
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Quick Prompt Chips (Light Cream Styling)
+   -------------------------------------------------------------------------- */
+.aura-quick-prompts {
+  padding: 10px 14px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  border-top: 1.5px solid rgba(212, 175, 55, 0.3);
+  background: #F4ECE1;
+}
+
+.aura-chip {
+  flex-shrink: 0;
+  background: #ffffff;
+  color: #3d3229;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.aura-chip:hover:not(:disabled) {
+  background: #d4af37;
+  border-color: #b48811;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+}
+
+.aura-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   Type / Input Area (NO Visible Scroll Bar)
+   -------------------------------------------------------------------------- */
+.aura-chat-footer {
+  padding: 12px 14px;
+  background: #EFE6D8;
+  border-top: 1.5px solid rgba(212, 175, 55, 0.4);
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.aura-chat-input {
+  flex: 1;
+  background: #ffffff;
+  border: 1.5px solid rgba(212, 175, 55, 0.4);
+  border-radius: 14px;
+  padding: 10px 14px;
+  color: #2d251e;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  resize: none;
+  max-height: 100px;
+  outline: none;
+  transition: all 0.25s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
+
+  /* HIDE ALL VISIBLE SCROLLBARS IN TYPING AREA */
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.aura-chat-input::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.aura-chat-input::placeholder {
+  color: #9c9083;
+}
+
+.aura-chat-input:focus {
+  border-color: #b48811;
+  background: #ffffff;
+  box-shadow: 
+    0 0 12px rgba(212, 175, 55, 0.35),
+    inset 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Send Button (Luxury Gold Icon Button) */
+.aura-send-btn {
+  background: linear-gradient(135deg, #d4af37 0%, #b48811 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.aura-send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.aura-send-btn:not(:disabled):hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.7);
+}
