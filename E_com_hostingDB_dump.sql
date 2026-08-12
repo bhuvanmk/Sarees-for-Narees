@@ -7,19 +7,19 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- Drop all existing tables cleanly if present
 DROP TABLE IF EXISTS 
-eviews;
+reviews;
 DROP TABLE IF EXISTS order_status_history;
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS ddresses;
+DROP TABLE IF EXISTS addresses;
 DROP TABLE IF EXISTS wishlist_items;
 DROP TABLE IF EXISTS cart_items;
-DROP TABLE IF EXISTS productimages;
+DROP TABLE IF EXISTS product_images;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS sub_category;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS 
-efresh_tokens;
+refresh_tokens;
 DROP TABLE IF EXISTS password_reset_tokens;
 DROP TABLE IF EXISTS otp_verification;
 DROP TABLE IF EXISTS users;
@@ -31,7 +31,7 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     
-ole VARCHAR(20) NOT NULL DEFAULT 'CUSTOMER',
+role VARCHAR(20) NOT NULL DEFAULT 'CUSTOMER',
     is_verified BOOLEAN NOT NULL DEFAULT FALSE,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -50,10 +50,10 @@ CREATE TABLE otp_verification (
 
 -- 3. Create Password Reset Tokens Table
 CREATE TABLE password_reset_tokens (
-    	oken_id INT AUTO_INCREMENT PRIMARY KEY,
+    	token_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     
-eset_token VARCHAR(255) NOT NULL UNIQUE,
+reset_token VARCHAR(255) NOT NULL UNIQUE,
     expiry_time DATETIME NOT NULL,
     is_used BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
@@ -61,11 +61,11 @@ eset_token VARCHAR(255) NOT NULL UNIQUE,
 
 -- 4. Create Refresh Tokens Table
 CREATE TABLE 
-efresh_tokens (
-    	oken_id INT AUTO_INCREMENT PRIMARY KEY,
+refresh_tokens (
+    	token_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     
-efresh_token VARCHAR(255) NOT NULL UNIQUE,
+refresh_token VARCHAR(255) NOT NULL UNIQUE,
     expiry_time DATETIME NOT NULL,
     is_revoked BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
@@ -92,7 +92,7 @@ CREATE TABLE products (
     seller_id INT NOT NULL DEFAULT 1,
     category_id INT NOT NULL,
     subcategory_id INT,
-    	itle VARCHAR(255) NOT NULL,
+    	title VARCHAR(255) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
     stock_quantity INT NOT NULL DEFAULT 10,
@@ -105,7 +105,7 @@ CREATE TABLE products (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 8. Create Product Images Table
-CREATE TABLE productimages (
+CREATE TABLE product_images (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     image_url VARCHAR(500) NOT NULL,
@@ -134,17 +134,17 @@ CREATE TABLE wishlist_items (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 11. Create Addresses Table
-CREATE TABLE ddresses (
-    ddress_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE addresses (
+    address_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    ull_name VARCHAR(100) NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL,
-    ddress_line1 VARCHAR(255) NOT NULL,
-    ddress_line2 VARCHAR(255),
+    address_line1 VARCHAR(255) NOT NULL,
+    address_line2 VARCHAR(255),
     city VARCHAR(100) NOT NULL,
     state VARCHAR(100) NOT NULL,
     pincode VARCHAR(20) NOT NULL,
-    ddress_type VARCHAR(20) DEFAULT 'Home',
+    address_type VARCHAR(20) DEFAULT 'Home',
     is_default BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
@@ -154,9 +154,9 @@ CREATE TABLE ddresses (
 CREATE TABLE orders (
     order_id VARCHAR(255) PRIMARY KEY,
     user_id INT NOT NULL,
-    	otal_amount DECIMAL(10,2) NOT NULL,
+    	total_amount DECIMAL(10,2) NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
-    ddress_snapshot TEXT,
+    address_snapshot TEXT,
     payment_method VARCHAR(50),
     payment_status VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -170,7 +170,7 @@ CREATE TABLE order_items (
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     price_per_unit DECIMAL(10,2) NOT NULL,
-    	otal_price DECIMAL(10,2) NOT NULL,
+    	total_price DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -187,20 +187,20 @@ CREATE TABLE order_status_history (
 
 -- 15. Create Reviews Table
 CREATE TABLE 
-eviews (
+reviews (
     
-eview_id INT AUTO_INCREMENT PRIMARY KEY,
+review_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     user_id INT NOT NULL,
     order_id VARCHAR(255),
     
-ating INT NOT NULL,
+rating INT NOT NULL,
     comment TEXT,
     photo_urls TEXT,
     is_approved BOOLEAN NOT NULL DEFAULT TRUE,
     helpful_count INT NOT NULL DEFAULT 0,
     
-eported_count INT NOT NULL DEFAULT 0,
+reported_count INT NOT NULL DEFAULT 0,
     seller_reply TEXT,
     seller_replied_at DATETIME,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -210,10 +210,9 @@ eported_count INT NOT NULL DEFAULT 0,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Seed Default Admin & Seller
-INSERT INTO users (user_id, username, email, password, 
-ole, is_verified, is_active) VALUES
-(1, 'admin', 'admin@sareesfornaaris.com', '.zE5aW7VwW2L0Q1ue1a4D5f6g7h8i9j0k1l2m3n4o5p6q', 'ADMIN', 1, 1),
-(2, 'seller1', 'seller1@sareesfornaaris.com', '.zE5aW7VwW2L0Q1ue1a4D5f6g7h8i9j0k1l2m3n4o5p6q', 'SELLER', 1, 1);
+INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `is_verified`, `is_active`) VALUES
+(1, 'teja', 'teamvelocity4you@gmail.com', '$2b$10$DtanbEdS1hJzly3uS3Q7rOVlYpq4OZsV6W8d3uqwdrQ1F94Pcl.PS', 'ADMIN', 1, 1),
+(2, 'seller1', 'seller1@sareesfornaaris.com', '$2a$10$7Q7lC.zE5aW7VwW2L0Q1ue1a4D5f6g7h8i9j0k1l2m3n4o5p6q', 'SELLER', 1, 1);
 
 -- Seed Categories
 INSERT INTO categories (category_id, category_name, categoryimage) VALUES
@@ -242,7 +241,7 @@ INSERT INTO sub_category (subcategory_id, category_id, subcategory_name) VALUES
 (16, 4, 'Bridal Silk');
 
 -- Seed Products
-INSERT INTO products (product_id, seller_id, 	itle, description, price, stock_quantity, category_id, subcategory_id, created_at) VALUES
+INSERT INTO products (product_id, seller_id, title, description, price, stock_quantity, category_id, subcategory_id, created_at) VALUES
 (1, 1, 'Wine Red Ruffle Party Saree', 'Chic pre-stitched ruffle saree with glamorous border detail.', 5999.00, 12, 3, 9, NOW()),
 (2, 1, 'Midnight Black Ruffle Saree', 'Contemporary tiered ruffle design in soft georgette.', 6499.00, 8, 3, 9, NOW()),
 (3, 1, 'Blush Pink Organza Ruffle Saree', 'Delicate pastel organza saree with flared ruffle hemline.', 5299.00, 15, 3, 9, NOW()),
@@ -317,7 +316,7 @@ INSERT INTO products (product_id, seller_id, 	itle, description, price, stock_qu
 (72, 1, 'Vermillion Red Bridal Silk Saree', 'Vibrant vermillion red bridal silk saree with pure gold zari.', 31500.00, 3, 4, 16, NOW());
 
 -- Seed Product Images
-INSERT INTO productimages (product_id, image_url) VALUES
+INSERT INTO product_images (product_id, image_url) VALUES
 (1, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Ruffle/Ruffle4.jpeg?updatedAt=1785161024860'),
 (2, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Ruffle/Ruffle1.jpeg?updatedAt=1785161024783'),
 (3, 'https://ik.imagekit.io/ceqkvm9eg/Sarees%20for%20Naries/Party%20Wear%20Sarees/_Ruffle/Ruffle3.avif?updatedAt=1785161024402'),
