@@ -52,6 +52,15 @@ export function useScrollReveal({ threshold = 0.15, rootMargin = '0px 0px -40px 
 
     observeElements();
 
+    // Fallback: Reveal all items automatically after 400ms if intersection threshold hasn't triggered
+    const fallbackTimer = setTimeout(() => {
+      if (container) {
+        container.classList.add('revealed');
+        const items = container.querySelectorAll('.reveal-fade-up, .reveal-fade-side, .reveal-stagger-item, .reveal-fade-only');
+        items.forEach(item => item.classList.add('revealed'));
+      }
+    }, 400);
+
     const mutationObserver = new MutationObserver(() => {
       observeElements();
     });
@@ -59,6 +68,7 @@ export function useScrollReveal({ threshold = 0.15, rootMargin = '0px 0px -40px 
     mutationObserver.observe(container, { childList: true, subtree: true });
 
     return () => {
+      clearTimeout(fallbackTimer);
       observer.disconnect();
       mutationObserver.disconnect();
     };
