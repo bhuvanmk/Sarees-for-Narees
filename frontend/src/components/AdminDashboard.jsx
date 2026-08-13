@@ -499,7 +499,7 @@ export default function AdminDashboard() {
                           <img src={imgUrl} alt={prod.name} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} />
                         </td>
                         <td>#{prod.productId}</td>
-                        <td><strong>{prod.name}</strong></td>
+                        <td><strong>{prod.name || prod.title || `Product #${prod.productId}`}</strong></td>
                         <td>{prod.category?.categoryName || 'N/A'}</td>
                         <td>{prod.subcategory?.subcategoryName || 'N/A'}</td>
                         <td>₹{Number(prod.price).toLocaleString('en-IN')}</td>
