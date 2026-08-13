@@ -3497,27 +3497,8 @@ body {
   box-shadow: 0 6px 18px rgba(200, 155, 60, 0.3);
 }
 
-.btn-buy-now-large {
-  flex: 2;
-  background: linear-gradient(135deg, var(--color-accent) 0%, #5a1227 100%);
-  border: 1px solid rgba(200, 155, 60, 0.4);
-  color: #FFFFFF;
-  padding: 0.85rem 1.5rem;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.25s ease;
-}
-
 .btn-buy-now-large:hover:not(:disabled) {
-  background: linear-gradient(135deg, #9b2c4e 0%, var(--color-accent) 100%);
-  box-shadow: 0 6px 18px rgba(123, 30, 58, 0.4);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .btn-wishlist-toggle {
