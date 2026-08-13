@@ -125,10 +125,10 @@ public class EmailService {
             String senderEmail = fromEmail != null && !fromEmail.trim().isEmpty() ? fromEmail : "teamvelocity4you@gmail.com";
 
             String jsonPayload = String.format(
-                    "{\"sender\":{\"name\":\"%s\",\"email\":\"%s\"},\"to\":[{\"email\":\"%s\"}],\"subject\":\"%s\",\"htmlContent\":%s}",
-                    senderName,
-                    senderEmail,
-                    toEmail,
+                    "{\"sender\":{\"name\":%s,\"email\":%s},\"to\":[{\"email\":%s}],\"subject\":%s,\"htmlContent\":%s}",
+                    escapeJson(senderName),
+                    escapeJson(senderEmail),
+                    escapeJson(toEmail),
                     escapeJson(subject),
                     escapeJsonValue(htmlContent)
             );
